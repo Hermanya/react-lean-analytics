@@ -1,7 +1,13 @@
-import ExampleComponent from './'
+import {Experiment, Variant} from './'
 
-describe('ExampleComponent', () => {
+describe('Experiment', () => {
   it('is truthy', () => {
-    expect(ExampleComponent).toBeTruthy()
+    expect(Experiment).toBeTruthy()
+  })
+})
+
+describe('Variant', () => {
+  it('is truthy', () => {
+    expect(Variant).toBeTruthy()
   })
 })
