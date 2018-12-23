@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-const URL = `https://vgxfdxwocf.execute-api.us-east-1.amazonaws.com/Prod/runs`;
+const URL = `https://nw7ipb8huf.execute-api.us-east-1.amazonaws.com/Prod/runs`;
 
 type experimentProps = {
   id: string
