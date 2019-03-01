@@ -3,7 +3,8 @@ import * as React from 'react'
 const URL = `https://nw7ipb8huf.execute-api.us-east-1.amazonaws.com/Prod/runs`;
 
 type experimentProps = {
-  id: string
+  id: string,
+  shouldCollectAnalytics?: boolean
 }
 type experimentState = {variantIndex: number}
 
@@ -22,7 +23,15 @@ export class Experiment extends React.Component<experimentProps, experimentState
   componentDidMount() {
     this.report();
   }
+  shouldCollectAnalytics () {
+    return typeof this.props.shouldCollectAnalytics === 'boolean' ?
+      this.props.shouldCollectAnalytics :
+      process.env.NODE_ENV === 'production'
+  }
   report(validated = false) {
+    if (!this.shouldCollectAnalytics()) {
+      return;
+    }
     fetch(URL, {
       method: "post",
       headers: {

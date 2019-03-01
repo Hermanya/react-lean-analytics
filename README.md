@@ -10,6 +10,10 @@
 npm install --save react-lean-analytics
 ```
 
+To see analytics in the dashboard, ensure you have set your `NODE_ENV` environment variable to `production`.
+
+> **The invocations and validations only count in production mode.**
+
 ## Usage
 
 ```tsx
@@ -46,6 +50,22 @@ class Example extends React.Component {
   }
 }
 ```
+
+## Props
+
+### Experiment
+
+| Name                   | Type    | Default                                 | Description                                                        |
+| ---------------------- | ------- | --------------------------------------- | ------------------------------------------------------------------ |
+| id                     | string  | -                                       | Experiment id.                                                     |
+| trackedAction          | string  | -                                       | The tracked action of you experiment.                              |
+| shouldCollectAnalytics | boolean | `process.env.NODE_ENV === 'production'` | **The invocations and validations only count in production mode.** |
+
+### Variant
+
+| Name        | Type   | Default | Description                                    |
+| ----------- | ------ | ------- | ---------------------------------------------- |
+| description | string | -       | What makes this variant different from others. |
 
 ## License
 
