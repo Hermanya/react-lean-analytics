@@ -10,10 +10,9 @@
 npm install --save react-lean-analytics
 ```
 
-Ensure you have setted you REACT_APP_ENV variable in the project process.env file,
-And that variable must be the same that productionEnv prop in experiment ("prod" by default).
+To see analytics in the dashboard, ensure you have set your `NODE_ENV` environment variable to `production`.
 
-**The invokes/success counters only count in production mode.**
+> **The invocations and validations only count in production mode.**
 
 ## Usage
 
@@ -53,19 +52,20 @@ class Example extends React.Component {
 ```
 
 ## Props
+
 ### Experiment
 
-| Name           | Type   | Default | Description                                                                   |
-|----------------|--------|---------|-------------------------------------------------------------------------------|
-| id             | string | -       | Experiment id.                                                                |
-| trackedAction  | string | -       | The tracked action of you experiment.                                         |
-| productionEnv  | string | "prod"  | The name of your production environment, defined in process.env.REACT_APP_ENV. **The invokes/success counters only count in production mode.** |
+| Name                   | Type    | Default                                 | Description                                                        |
+| ---------------------- | ------- | --------------------------------------- | ------------------------------------------------------------------ |
+| id                     | string  | -                                       | Experiment id.                                                     |
+| trackedAction          | string  | -                                       | The tracked action of you experiment.                              |
+| shouldCollectAnalytics | boolean | `process.env.NODE_ENV === 'production'` | **The invocations and validations only count in production mode.** |
 
 ### Variant
 
-| Name           | Type        | Default | Description   |
-|----------------|-------------|---------|---------------|
-| id             | description | -       | Variant name. |
+| Name        | Type   | Default | Description                                    |
+| ----------- | ------ | ------- | ---------------------------------------------- |
+| description | string | -       | What makes this variant different from others. |
 
 ## License
 

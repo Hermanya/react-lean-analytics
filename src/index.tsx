@@ -4,7 +4,7 @@ const URL = `https://nw7ipb8huf.execute-api.us-east-1.amazonaws.com/Prod/runs`;
 
 type experimentProps = {
   id: string,
-  productionEnv: string
+  shouldCollectAnalytics?: boolean
 }
 type experimentState = {variantIndex: number}
 
@@ -20,29 +20,30 @@ export class Experiment extends React.Component<experimentProps, experimentState
       variantIndex: Math.floor(Math.random() * childrenLength)
     }
   }
-
-  public static defaultProps = {
-    productionEnv: "prod"
-  };
-
   componentDidMount() {
     this.report();
   }
+  shouldCollectAnalytics () {
+    return typeof this.props.shouldCollectAnalytics === 'boolean' ?
+      this.props.shouldCollectAnalytics :
+      process.env.NODE_ENV === 'production'
+  }
   report(validated = false) {
-    if (this.props.productionEnv === process.env.REACT_APP_ENV) {
-      fetch(URL, {
-        method: "post",
-        headers: {
-          Accept: "application/json, text/plain, */*",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          testId: this.props.id,
-          variantIndex: this.state.variantIndex,
-          validated
-        })
-      });
+    if (!this.shouldCollectAnalytics()) {
+      return;
     }
+    fetch(URL, {
+      method: "post",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        testId: this.props.id,
+        variantIndex: this.state.variantIndex,
+        validated
+      })
+    });
   }
   render() {
     let variant = this.props.children ?
