@@ -3,7 +3,8 @@ import * as React from 'react'
 const URL = `https://nw7ipb8huf.execute-api.us-east-1.amazonaws.com/Prod/runs`;
 
 type experimentProps = {
-  id: string
+  id: string,
+  productionEnv: string
 }
 type experimentState = {variantIndex: number}
 
@@ -19,22 +20,29 @@ export class Experiment extends React.Component<experimentProps, experimentState
       variantIndex: Math.floor(Math.random() * childrenLength)
     }
   }
+
+  public static defaultProps = {
+    productionEnv: "prod"
+  };
+
   componentDidMount() {
     this.report();
   }
   report(validated = false) {
-    fetch(URL, {
-      method: "post",
-      headers: {
-        Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        testId: this.props.id,
-        variantIndex: this.state.variantIndex,
-        validated
-      })
-    });
+    if (this.props.productionEnv === process.env.REACT_APP_ENV) {
+      fetch(URL, {
+        method: "post",
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          testId: this.props.id,
+          variantIndex: this.state.variantIndex,
+          validated
+        })
+      });
+    }
   }
   render() {
     let variant = this.props.children ?
