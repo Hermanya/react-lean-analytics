@@ -10,7 +10,7 @@ export default class App extends Component {
           trackedAction="Purchase"
           id="..."
         >
-          <Variant description={`Variant #1`}>
+          <Variant description={`Variant #1`} weight={0.1}>
             {callback => (
               <div>
                 <h2>Variant #1</h2>
@@ -20,10 +20,20 @@ export default class App extends Component {
               </div>
             )}
           </Variant>
-          <Variant description={`Variant #2`}>
+          <Variant description={`Variant #2`} weight={0.6}>
             {callback => (
               <div>
                 <h2>Variant #2</h2>
+                <button onClick={callback}>
+                  this will trigger the callback
+                </button>
+              </div>
+            )}
+          </Variant>
+          <Variant description={`Variant #3`}>
+            {callback => (
+              <div>
+                <h2>Variant #3</h2>
                 <button onClick={callback}>
                   this will trigger the callback
                 </button>
