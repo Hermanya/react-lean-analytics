@@ -75,7 +75,7 @@ class Example extends React.Component {
               />
             )}
           </Variant>
-          <Variant description={`"Buy online" CTA`} weight={0.3}>
+          <Variant description={`"Buy online" CTA`} weight={2}>
             {callback => (
               <RetailComponent
                 callback={callback}
@@ -83,7 +83,7 @@ class Example extends React.Component {
               />
             )}
           </Variant>
-          <Variant description={`"Buy here" CTA`} weight={0.2}>
+          <Variant description={`"Buy here" CTA`}>
             {callback => (
               <RetailComponent
                 callback={callback}
