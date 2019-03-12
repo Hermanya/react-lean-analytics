@@ -53,9 +53,7 @@ class Example extends React.Component {
 
 ### Using weights
 
-With 3 variants, the default weight for each one will be 0.3
-
-> **The sum of variants weights can't be greater than 1.**
+Weights are proportional. The default weight for each variant is 1. If you want to make a variant to be chosen more often, give it a "heavier" weight.
 
 ```tsx
 import * as React from 'react'
@@ -112,10 +110,10 @@ class Example extends React.Component {
 
 ### Variant
 
-| Name        | Type   | Default | Description                                    |
-| ----------- | ------ | ------- | ---------------------------------------------- |
-| description | string | -       | What makes this variant different from others. |
-| weight | number | 1/(variants length) | ex. 0.5, 0.8, 0.1. variants invocations can be 'controlled' by weights |
+| Name        | Type   | Default | Description                                                         |
+| ----------- | ------ | ------- | ------------------------------------------------------------------- |
+| description | string | -       | What makes this variant different from others.                      |
+| weight      | number | 1       | ex. 0.5, 2, 99. variants invocations can be 'controlled' by weights |
 
 ## License
 

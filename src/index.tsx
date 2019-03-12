@@ -1,41 +1,29 @@
 import * as React from 'react'
+import {ReactNodeArray, ReactElement} from 'react'
+import WeightedPicker from "weighted-picker/browser";
 
 const URL = `https://nw7ipb8huf.execute-api.us-east-1.amazonaws.com/Prod/runs`;
+const defaultWeight = 1
 
 type experimentProps = {
   id: string,
-  shouldCollectAnalytics?: boolean,
-  weight: number
+  shouldCollectAnalytics?: boolean
 }
-type experimentState = {variantIndex: number, selectedVariant: any}
+type experimentState = {variantIndex: number}
 
 export class Experiment extends React.Component<experimentProps, experimentState> {
   constructor(props: experimentProps) {
     super(props);
 
-    let weighedVariants,
-      randomnumber = 0,
-      childrenLength = 0;
-    if (this.props.children) {
-      childrenLength = (this.props.children as React.ReactNodeArray).length
-      let variantsweight = React.Children.map(
-        this.props.children, x => (x as any).props.weight || 1/childrenLength
-      );
-      let totalweight = variantsweight ?
-        variantsweight.reduce((sum, val) => sum + (Number((val).toFixed(1))*10), 0)
-        : 0;
-      if (totalweight > 10) {
-        console.error("The sum of variants weights can't be greater than 1.");
-      }
-      weighedVariants = React.Children.map(this.props.children, (ch, index) =>
-        [ ...Array(Math.floor(variantsweight[index] * 10)).fill(ch as any) ]
-      );
+    let children  = this.props.children as ReactNodeArray;
 
-      randomnumber = Math.floor(Math.random() * totalweight);
-    }
+    const picker = new WeightedPicker(children.length, index => {
+      let variant = children[index] as ReactElement<variantProps>
+      return variant.props.weight || defaultWeight
+    });
+
     this.state = {
-      variantIndex: weighedVariants ? Number((weighedVariants[randomnumber] as any).key[1]) : 0,
-      selectedVariant: weighedVariants ? weighedVariants[randomnumber] : undefined
+      variantIndex: picker.pickOne()
     }
   }
   componentDidMount() {
@@ -64,15 +52,23 @@ export class Experiment extends React.Component<experimentProps, experimentState
     });
   }
   render() {
-    let variant = this.state.selectedVariant ?
-      this.state.selectedVariant.props.children(this.onSuccess.bind(this)) :
-      null;
-    return variant;
+    if (this.state.variantIndex === undefined || !this.props.children) {
+      return undefined;
+    }
+    let variant = this.props.children[this.state.variantIndex]
+    return variant.props.children(this.onSuccess.bind(this));
   }
   onSuccess() {
     this.report(true);
   }
 }
-
-export const Variant: React.FunctionComponent<{}> = ({ children }) =>
+type variantProps = {
+  description?: string
+  weight?: number
+}
+export const Variant: React.FunctionComponent<variantProps> = ({ children }) =>
   (children as React.ReactElement<any>)
+
+Variant.defaultProps = {
+  weight: defaultWeight
+}
