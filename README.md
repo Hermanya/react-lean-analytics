@@ -51,6 +51,53 @@ class Example extends React.Component {
 }
 ```
 
+### Using weights
+
+Weights are proportional. The default weight for each variant is 1. If you want to make a variant to be chosen more often, give it a "heavier" weight.
+
+```tsx
+import * as React from 'react'
+
+import {Experiment, Variant} from 'react-lean-analytics'
+
+class Example extends React.Component {
+  render () {
+    return (
+       <Experiment
+          trackedAction="Purchase"
+          id="...."
+        >
+          <Variant description={`"Buy now" CTA`} weight={0.5}>
+            {callback => (
+              <RetailComponent
+                callback={callback}
+                cta="Buy now"
+              />
+            )}
+          </Variant>
+          <Variant description={`"Buy online" CTA`} weight={2}>
+            {callback => (
+              <RetailComponent
+                callback={callback}
+                cta="Buy online"
+              />
+            )}
+          </Variant>
+          <Variant description={`"Buy here" CTA`}>
+            {callback => (
+              <RetailComponent
+                callback={callback}
+                cta="Buy here"
+              />
+            )}
+          </Variant>
+        </Experiment>
+
+    )
+  }
+}
+```
+
 ## Props
 
 ### Experiment
@@ -63,9 +110,10 @@ class Example extends React.Component {
 
 ### Variant
 
-| Name        | Type   | Default | Description                                    |
-| ----------- | ------ | ------- | ---------------------------------------------- |
-| description | string | -       | What makes this variant different from others. |
+| Name        | Type   | Default | Description                                                         |
+| ----------- | ------ | ------- | ------------------------------------------------------------------- |
+| description | string | -       | What makes this variant different from others.                      |
+| weight      | number | 1       | ex. 0.5, 2, 99. variants invocations can be 'controlled' by weights |
 
 ## License
 

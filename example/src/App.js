@@ -8,7 +8,9 @@ export default class App extends Component {
       <div style={{ padding: 16 }}>
         <Experiment
           trackedAction="Purchase"
-          id="..."
+          id="4f2d4ddb-7414-4245-9379-a028569601c5"
+          //  ^ UPDATE ME
+          shouldCollectAnalytics={true}
         >
           <Variant description={`Variant #1`}>
             {callback => (
@@ -20,7 +22,7 @@ export default class App extends Component {
               </div>
             )}
           </Variant>
-          <Variant description={`Variant #2`}>
+          <Variant description={`Variant #2`} weight={3}>
             {callback => (
               <div>
                 <h2>Variant #2</h2>
