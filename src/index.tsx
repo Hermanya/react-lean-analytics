@@ -1,6 +1,9 @@
 import * as React from 'react'
+import {ReactNodeArray, ReactElement} from 'react'
+import WeightedPicker from "weighted-picker/browser";
 
 const URL = `https://nw7ipb8huf.execute-api.us-east-1.amazonaws.com/Prod/runs`;
+const defaultWeight = 1
 
 type experimentProps = {
   id: string,
@@ -12,12 +15,15 @@ export class Experiment extends React.Component<experimentProps, experimentState
   constructor(props: experimentProps) {
     super(props);
 
-    let childrenLength = 0
-    if (this.props.children) {
-      childrenLength = (this.props.children as React.ReactNodeArray).length
-    }
+    let children  = this.props.children as ReactNodeArray;
+
+    const picker = new WeightedPicker(children.length, index => {
+      let variant = children[index] as ReactElement<variantProps>
+      return variant.props.weight || defaultWeight
+    });
+
     this.state = {
-      variantIndex: Math.floor(Math.random() * childrenLength)
+      variantIndex: picker.pickOne()
     }
   }
   componentDidMount() {
@@ -46,14 +52,23 @@ export class Experiment extends React.Component<experimentProps, experimentState
     });
   }
   render() {
-    let variant = this.props.children ?
-      this.props.children[this.state.variantIndex] : undefined;
+    if (this.state.variantIndex === undefined || !this.props.children) {
+      return undefined;
+    }
+    let variant = this.props.children[this.state.variantIndex]
     return variant.props.children(this.onSuccess.bind(this));
   }
   onSuccess() {
     this.report(true);
   }
 }
-
-export const Variant: React.FunctionComponent<{}> = ({ children }) =>
+type variantProps = {
+  description?: string
+  weight?: number
+}
+export const Variant: React.FunctionComponent<variantProps> = ({ children }) =>
   (children as React.ReactElement<any>)
+
+Variant.defaultProps = {
+  weight: defaultWeight
+}
