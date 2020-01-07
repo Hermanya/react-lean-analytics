@@ -102,11 +102,13 @@ class Example extends React.Component {
 
 ### Experiment
 
-| Name                   | Type    | Default                                 | Description                                                        |
-| ---------------------- | ------- | --------------------------------------- | ------------------------------------------------------------------ |
-| id                     | string  | -                                       | Experiment id.                                                     |
-| trackedAction          | string  | -                                       | The tracked action of you experiment.                              |
-| shouldCollectAnalytics | boolean | `process.env.NODE_ENV === 'production'` | **The invocations and validations only count in production mode.** |
+| Name                   | Type     | Default                                 | Description                                                        |
+| ---------------------- | -------- | --------------------------------------- | ------------------------------------------------------------------ |
+| id                     | string   | -                                       | Experiment id.                                                     |
+| forceVariant           | number   | -                                       | Variant index to render. helper for consistent experience          |
+| onSelectedIndex        | function | -                                       | Callback to get variant index at render. (index: number) => void   |
+| trackedAction          | string   | -                                       | The tracked action of you experiment.                              |
+| shouldCollectAnalytics | boolean  | `process.env.NODE_ENV === 'production'` | **The invocations and validations only count in production mode.** |
 
 ### Variant
 

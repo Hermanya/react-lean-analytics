@@ -7,6 +7,8 @@ const defaultWeight = 1
 
 type experimentProps = {
   id: string,
+  forceVariant: number,
+  onSelectedIndex(index: number): void,
   shouldCollectAnalytics?: boolean
 }
 type experimentState = {variantIndex: number}
@@ -21,13 +23,18 @@ export class Experiment extends React.Component<experimentProps, experimentState
       let variant = children[index] as ReactElement<variantProps>
       return variant.props.weight || defaultWeight
     });
-
+    
+    const variantIndex = props.forceVariant === null || isNaN(props.forceVariant) ? 
+      picker.pickOne() :
+      props.forceVariant;
     this.state = {
-      variantIndex: picker.pickOne()
+      variantIndex
     }
   }
   componentDidMount() {
     this.report();
+    this.props.onSelectedIndex &&
+      this.props.onSelectedIndex(this.state.variantIndex)
   }
   shouldCollectAnalytics () {
     return typeof this.props.shouldCollectAnalytics === 'boolean' ?
