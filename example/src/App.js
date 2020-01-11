@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
 
-import { Experiment, Variant } from 'react-lean-analytics'
+import { Experiment, Variant } from "react-lean-analytics";
 
 export default class App extends Component {
-  render () {
+  render() {
     return (
       <div style={{ padding: 16 }}>
         <Experiment
@@ -35,6 +35,6 @@ export default class App extends Component {
           </Variant>
         </Experiment>
       </div>
-    )
+    );
   }
 }
