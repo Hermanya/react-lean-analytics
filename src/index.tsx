@@ -7,8 +7,8 @@ const defaultWeight = 1
 
 type experimentProps = {
   id: string,
-  forceVariant: number,
-  onSelectedIndex(index: number): void,
+  forceVariant?: number,
+  onSelectedIndex?:(index: number)=> void,
   shouldCollectAnalytics?: boolean
 }
 type experimentState = {variantIndex: number}
@@ -17,24 +17,35 @@ export class Experiment extends React.Component<experimentProps, experimentState
   constructor(props: experimentProps) {
     super(props);
 
-    let children  = this.props.children as ReactNodeArray;
+    const {
+      children,
+      forceVariant
+    } = this.props
 
-    const picker = new WeightedPicker(children.length, index => {
-      let variant = children[index] as ReactElement<variantProps>
+    const variants = children as ReactNodeArray;
+
+    if (!variants || !Array.isArray(variants)) {
+      throw Error('Experiment requires children components')
+    }
+
+    const picker = new WeightedPicker(variants.length, index => {
+      let variant = variants[index] as ReactElement<variantProps>
       return variant.props.weight || defaultWeight
     });
-    
-    const variantIndex = props.forceVariant === null || isNaN(props.forceVariant) ? 
+
+    const variantIndex = forceVariant === undefined || isNaN(parseFloat(String(forceVariant)))  ?
       picker.pickOne() :
-      props.forceVariant;
+      forceVariant;
+
     this.state = {
       variantIndex
     }
   }
   componentDidMount() {
     this.report();
-    this.props.onSelectedIndex &&
+    if (this.props.onSelectedIndex) {
       this.props.onSelectedIndex(this.state.variantIndex)
+    }
   }
   shouldCollectAnalytics () {
     return typeof this.props.shouldCollectAnalytics === 'boolean' ?
