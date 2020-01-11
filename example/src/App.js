@@ -8,9 +8,10 @@ export default class App extends Component {
       <div style={{ padding: 16 }}>
         <Experiment
           trackedAction="Purchase"
-          id="4f2d4ddb-7414-4245-9379-a028569601c5"
+          id="04f985f3-5115-4f82-817e-fc1150d09a33"
           //  ^ UPDATE ME
           shouldCollectAnalytics={true}
+          onSelectedIndex={index => console.log(index)}
         >
           <Variant description={`Variant #1`}>
             {callback => (
